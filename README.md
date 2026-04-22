@@ -19,6 +19,7 @@
   - [Model Layer](#model-layer)
   - [Utility Layer](#utility-layer)
   - [GUI Layer](#gui-layer)
+  - [FXML — Screen to Controller Wiring](#fxml--screen-to-controller-wiring)
 - [OOP Concepts Applied](#oop-concepts-applied)
 - [Default Login Credentials](#default-login-credentials)
 - [Seed Data](#seed-data)
@@ -181,6 +182,8 @@ LibConnect/
 │                   GUI Layer                      │
 │  LoginController  │  LibrarianDashboard          │
 │  MemberDashboard  │  GuestDashboard              │
+│  BaseController — GUIManager calls initData()   │
+│    to inject the authenticated User + GUIManager │
 │           GUIManager (screen router)             │
 └────────────────────┬────────────────────────────┘
                      │ interacts with
@@ -317,15 +320,27 @@ The single source of truth for all application data. Implemented using the **Sin
 
 ### GUI Layer
 
-> ⚙️ In Progress — controllers and FXML screens will be documented here as they are implemented.
+> All four FXML views are complete and mapped to the controllers below. Key `fx:id` bindings are listed in **FXML — Screen to Controller Wiring**; remaining work (e.g. styling polish) is in the [Roadmap](#roadmap).
 
 | File | Responsibility |
 |---|---|
-| `GUIManager.java` | Manages screen transitions and scene loading |
-| `LoginController.java` | Handles login form logic and role detection |
+| `GUIManager.java` | Central screen and scene manager. Configures the primary `Stage`, loads FXML via a private `loadScene()` method, injects the authenticated `User` into every controller by calling `BaseController.initData(User, GUIManager)` after each load, applies the global CSS stylesheet, routes users to the correct dashboard in `showDashboard(User)`, provides shared alert dialogs (`showSuccess`, `showWarning`, `showError`), displays book details with `displayBookDetails(Book)`, and handles `logout()` back to the login screen. |
+| `BaseController.java` | Abstract base class for all FXML controllers. Holds shared references to `currentUser` and `guiManager`. Defines the `initData(User, GUIManager)` lifecycle method invoked by `GUIManager` after every scene load, the abstract `onInit()` for subclasses, and a shared `handleLogout()` for navigation. |
+| `LoginController.java` | Login screen. `handleLogin()` validates email, authenticates with `DataStore.authenticate()`, and calls `guiManager.showDashboard(user)`; `handleGuestAccess()` opens the Guest dashboard without login; `handleReset()` clears the form. |
 | `LibrarianDashboardController.java` | UI for book/member management |
 | `MemberDashboardController.java` | UI for borrowing and returning books |
 | `GuestDashboardController.java` | UI for browsing and searching books |
+
+### FXML — Screen to Controller Wiring
+
+Each FXML file sets `fx:controller` to its screen class. The table below lists primary `fx:id` fields injected into the controller.
+
+| FXML File | Controller | Key `fx:id` fields |
+|---|---|---|
+| `Login.fxml` | `LoginController` | `emailField`, `passwordField`, `errorLabel` |
+| `LibrarianDashboard.fxml` | `LibrarianDashboardController` | `bookTable`, `memberTable`, and all form fields |
+| `MemberDashboard.fxml` | `MemberDashboardController` | `catalogTable`, `borrowedListView`, borrow/return fields |
+| `GuestDashboard.fxml` | `GuestDashboardController` | `catalogTable`, `searchField`, `genreFilterCombo` |
 
 ---
 
@@ -451,14 +466,16 @@ git push origin main
 - [x] `Member.java` — Member role
 - [x] `Guest.java` — Guest role
 - [x] `DataStore.java` — Singleton centralized storage
-- [ ] `Main.java` — Application entry point
-- [ ] `GUIManager.java` — Screen manager
-- [ ] `Login.fxml` — Login screen UI
-- [ ] `LibrarianDashboard.fxml` — Librarian UI
-- [ ] `MemberDashboard.fxml` — Member UI
-- [ ] `GuestDashboard.fxml` — Guest UI
+- [x] `Main.java` — Application entry point
+- [x] `GUIManager.java` — Screen manager
+- [x] `BaseController.java` — Shared controller base
+- [x] `LoginController.java` — Login screen controller
+- [x] `Login.fxml` — Login screen UI
+- [x] `LibrarianDashboard.fxml` — Librarian UI
+- [x] `MemberDashboard.fxml` — Member UI
+- [x] `GuestDashboard.fxml` — Guest UI
 - [ ] `styles.css` — Global styling
-- [ ] Full JavaFX controller wiring
+- [x] Full JavaFX controller wiring
 - [ ] Unit tests
 
 ---

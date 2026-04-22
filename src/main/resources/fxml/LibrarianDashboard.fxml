@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.libconnect.gui.LibrarianDashboardController"
+    styleClass="root-pane"
+    prefWidth="1100"
+    prefHeight="700">
+
+    <!-- ══════════════════════════════════════════════════════════
+         TOP NAV BAR
+    ══════════════════════════════════════════════════════════ -->
+    <top>
+        <HBox
+            styleClass="nav-bar"
+            alignment="CENTER_LEFT"
+            spacing="16">
+
+            <padding>
+                <Insets top="14" right="24" bottom="14" left="24"/>
+            </padding>
+
+            <Label text="LibConnect" styleClass="nav-brand"/>
+
+            <Label text="|" styleClass="nav-divider"/>
+
+            <Label
+                fx:id="welcomeLabel"
+                text="Welcome, Librarian!"
+                styleClass="nav-welcome"/>
+
+            <!-- Spacer -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Stats -->
+            <Label
+                fx:id="totalBooksLabel"
+                text="Total Books: 0"
+                styleClass="nav-stat"/>
+
+            <Label
+                fx:id="totalMembersLabel"
+                text="Total Members: 0"
+                styleClass="nav-stat"/>
+
+            <Button
+                text="Logout"
+                onAction="#handleLogoutButton"
+                styleClass="btn-danger"/>
+
+        </HBox>
+    </top>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CENTER: Tab Panel
+    ══════════════════════════════════════════════════════════ -->
+    <center>
+        <TabPane
+            tabClosingPolicy="UNAVAILABLE"
+            styleClass="main-tab-pane">
+
+            <!-- ── TAB 1: Book Catalog ────────────────────────── -->
+            <Tab text="📚  Book Catalog">
+                <VBox spacing="14" styleClass="tab-content">
+                    <padding>
+                        <Insets top="20" right="24" bottom="20" left="24"/>
+                    </padding>
+
+                    <!-- Search Bar -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField
+                            fx:id="searchField"
+                            promptText="Search by title or author..."
+                            styleClass="input-field"
+                            prefWidth="320"
+                            HBox.hgrow="ALWAYS"/>
+                        <Button
+                            text="Search"
+                            onAction="#handleSearchBooks"
+                            styleClass="btn-primary"/>
+                        <Button
+                            text="Clear"
+                            onAction="#handleClearSearch"
+                            styleClass="btn-secondary"/>
+                        <Button
+                            text="View Details"
+                            onAction="#handleViewBookDetails"
+                            styleClass="btn-ghost"/>
+                    </HBox>
+
+                    <!-- Book Table -->
+                    <TableView
+                        fx:id="bookTable"
+                        VBox.vgrow="ALWAYS"
+                        styleClass="data-table">
+                        <columns>
+                            <TableColumn
+                                fx:id="colBookId"
+                                text="Book ID"
+                                prefWidth="100"/>
+                            <TableColumn
+                                fx:id="colTitle"
+                                text="Title"
+                                prefWidth="280"/>
+                            <TableColumn
+                                fx:id="colAuthor"
+                                text="Author"
+                                prefWidth="200"/>
+                            <TableColumn
+                                fx:id="colGenre"
+                                text="Genre"
+                                prefWidth="140"/>
+                            <TableColumn
+                                fx:id="colCopies"
+                                text="Copies"
+                                prefWidth="80"/>
+                        </columns>
+                    </TableView>
+
+                </VBox>
+            </Tab>
+
+            <!-- ── TAB 2: Add Book ────────────────────────────── -->
+            <Tab text="➕  Add Book">
+                <VBox spacing="18" maxWidth="500" styleClass="tab-content">
+                    <padding>
+                        <Insets top="32" right="48" bottom="32" left="48"/>
+                    </padding>
+
+                    <Label text="Add New Book" styleClass="section-title"/>
+                    <Separator/>
+
+                    <VBox spacing="6">
+                        <Label text="Book ID" styleClass="field-label"/>
+                        <TextField
+                            fx:id="addBookIdField"
+                            promptText="e.g. BK-009"
+                            styleClass="input-field"/>
+                    </VBox>
+
+                    <VBox spacing="6">
+                        <Label text="Title" styleClass="field-label"/>
+                        <TextField
+                            fx:id="addTitleField"
+                            promptText="Book title"
+                            styleClass="input-field"/>
+                    </VBox>
+
+                    <VBox spacing="6">
+                        <Label text="Author" styleClass="field-label"/>
+                        <TextField
+                            fx:id="addAuthorField"
+                            promptText="Author name"
+                            styleClass="input-field"/>
+                    </VBox>
+
+                    <VBox spacing="6">
+                        <Label text="Genre" styleClass="field-label"/>
+                        <TextField
+                            fx:id="addGenreField"
+                            promptText="e.g. Fiction, Technology"
+                            styleClass="input-field"/>
+                    </VBox>
+
+                    <VBox spacing="6">
+                        <Label text="Number of Copies" styleClass="field-label"/>
+                        <TextField
+                            fx:id="addCopiesField"
+                            promptText="e.g. 5"
+                            styleClass="input-field"/>
+                    </VBox>
+
+                    <Button
+                        text="Add Book to Catalog"
+                        onAction="#handleAddBook"
+                        styleClass="btn-primary"
+                        maxWidth="Infinity"/>
+
+                </VBox>
+            </Tab>
+
+            <!-- ── TAB 3: Remove Book ─────────────────────────── -->
+            <Tab text="🗑  Remove Book">
+                <VBox spacing="18" maxWidth="500" styleClass="tab-content">
+                    <padding>
+                        <Insets top="32" right="48" bottom="32" left="48"/>
+                    </padding>
+
+                    <Label text="Remove Book" styleClass="section-title"/>
+                    <Separator/>
+
+                    <Label
+                        text="Enter the Book ID of the book you want to remove from the catalog."
+                        styleClass="helper-text"
+                        wrapText="true"/>
+
+                    <VBox spacing="6">
+                        <Label text="Book ID" styleClass="field-label"/>
+                        <TextField
+                            fx:id="removeBookIdField"
+                            promptText="e.g. BK-003"
+                            styleClass="input-field"/>
+                    </VBox>
+
+                    <Button
+                        text="Remove Book"
+                        onAction="#handleRemoveBook"
+                        styleClass="btn-danger"
+                        maxWidth="Infinity"/>
+
+                </VBox>
+            </Tab>
+
+            <!-- ── TAB 4: Manage Members ──────────────────────── -->
+            <Tab text="👥  Members">
+                <VBox spacing="14" styleClass="tab-content">
+                    <padding>
+                        <Insets top="20" right="24" bottom="20" left="24"/>
+                    </padding>
+
+                    <Label text="Registered Members" styleClass="section-title"/>
+
+                    <!-- Members Table -->
+                    <TableView
+                        fx:id="memberTable"
+                        VBox.vgrow="ALWAYS"
+                        styleClass="data-table">
+                        <columns>
+                            <TableColumn
+                                fx:id="colMemberId"
+                                text="Member ID"
+                                prefWidth="140"/>
+                            <TableColumn
+                                fx:id="colMemberName"
+                                text="Name"
+                                prefWidth="220"/>
+                            <TableColumn
+                                fx:id="colMemberEmail"
+                                text="Email"
+                                prefWidth="280"/>
+                        </columns>
+                    </TableView>
+
+                    <Separator/>
+
+                    <!-- Manage Action -->
+                    <Label text="Manage Member" styleClass="section-title"/>
+
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <VBox spacing="6">
+                            <Label text="Member ID" styleClass="field-label"/>
+                            <TextField
+                                fx:id="manageMemberIdField"
+                                promptText="e.g. MEM-001"
+                                styleClass="input-field"
+                                prefWidth="200"/>
+                        </VBox>
+
+                        <VBox spacing="6">
+                            <Label text="Action" styleClass="field-label"/>
+                            <ComboBox
+                                fx:id="manageActionCombo"
+                                prefWidth="140"
+                                styleClass="combo-field"/>
+                        </VBox>
+
+                        <VBox spacing="6">
+                            <Label text=" " styleClass="field-label"/>
+                            <Button
+                                text="Apply Action"
+                                onAction="#handleManageMember"
+                                styleClass="btn-primary"/>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>

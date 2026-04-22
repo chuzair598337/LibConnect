@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.libconnect.gui.MemberDashboardController"
+    styleClass="root-pane"
+    prefWidth="1100"
+    prefHeight="700">
+
+    <!-- ══════════════════════════════════════════════════════════
+         TOP NAV BAR
+    ══════════════════════════════════════════════════════════ -->
+    <top>
+        <HBox
+            styleClass="nav-bar"
+            alignment="CENTER_LEFT"
+            spacing="16">
+
+            <padding>
+                <Insets top="14" right="24" bottom="14" left="24"/>
+            </padding>
+
+            <Label text="LibConnect" styleClass="nav-brand"/>
+            <Label text="|" styleClass="nav-divider"/>
+
+            <Label
+                fx:id="welcomeLabel"
+                text="Welcome, Member!"
+                styleClass="nav-welcome"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label
+                fx:id="borrowedCountLabel"
+                text="Borrowed Books: 0"
+                styleClass="nav-stat"/>
+
+            <Button
+                text="Logout"
+                onAction="#handleLogoutButton"
+                styleClass="btn-danger"/>
+
+        </HBox>
+    </top>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CENTER: Tab Panel
+    ══════════════════════════════════════════════════════════ -->
+    <center>
+        <TabPane
+            tabClosingPolicy="UNAVAILABLE"
+            styleClass="main-tab-pane">
+
+            <!-- ── TAB 1: Browse Catalog ──────────────────────── -->
+            <Tab text="📚  Browse Catalog">
+                <VBox spacing="14" styleClass="tab-content">
+                    <padding>
+                        <Insets top="20" right="24" bottom="20" left="24"/>
+                    </padding>
+
+                    <!-- Search Row -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField
+                            fx:id="searchField"
+                            promptText="Search by title or author..."
+                            styleClass="input-field"
+                            prefWidth="320"
+                            HBox.hgrow="ALWAYS"/>
+                        <Button
+                            text="Search"
+                            onAction="#handleSearchBooks"
+                            styleClass="btn-primary"/>
+                        <Button
+                            text="Clear"
+                            onAction="#handleClearSearch"
+                            styleClass="btn-secondary"/>
+                        <Button
+                            text="View Details"
+                            onAction="#handleViewBookDetails"
+                            styleClass="btn-ghost"/>
+                        <Button
+                            text="Select to Borrow"
+                            onAction="#handleSelectForBorrow"
+                            styleClass="btn-accent"/>
+                    </HBox>
+
+                    <!-- Catalog Table -->
+                    <TableView
+                        fx:id="catalogTable"
+                        VBox.vgrow="ALWAYS"
+                        styleClass="data-table">
+                        <columns>
+                            <TableColumn
+                                fx:id="colBookId"
+                                text="Book ID"
+                                prefWidth="100"/>
+                            <TableColumn
+                                fx:id="colTitle"
+                                text="Title"
+                                prefWidth="280"/>
+                            <TableColumn
+                                fx:id="colAuthor"
+                                text="Author"
+                                prefWidth="200"/>
+                            <TableColumn
+                                fx:id="colGenre"
+                                text="Genre"
+                                prefWidth="140"/>
+                            <TableColumn
+                                fx:id="colCopies"
+                                text="Available"
+                                prefWidth="90"/>
+                        </columns>
+                    </TableView>
+
+                </VBox>
+            </Tab>
+
+            <!-- ── TAB 2: Borrow Book ─────────────────────────── -->
+            <Tab text="📥  Borrow Book">
+                <VBox spacing="18" maxWidth="500" styleClass="tab-content">
+                    <padding>
+                        <Insets top="32" right="48" bottom="32" left="48"/>
+                    </padding>
+
+                    <Label text="Borrow a Book" styleClass="section-title"/>
+                    <Separator/>
+
+                    <Label
+                        text="Enter the exact book title or select a book from the catalog tab and click 'Select to Borrow'."
+                        styleClass="helper-text"
+                        wrapText="true"/>
+
+                    <VBox spacing="6">
+                        <Label text="Book Title" styleClass="field-label"/>
+                        <TextField
+                            fx:id="borrowTitleField"
+                            promptText="Enter exact book title"
+                            styleClass="input-field"/>
+                    </VBox>
+
+                    <Button
+                        text="Borrow Book"
+                        onAction="#handleBorrowBook"
+                        styleClass="btn-primary"
+                        maxWidth="Infinity"/>
+
+                </VBox>
+            </Tab>
+
+            <!-- ── TAB 3: Return Book ─────────────────────────── -->
+            <Tab text="📤  Return Book">
+                <VBox spacing="18" styleClass="tab-content">
+                    <padding>
+                        <Insets top="32" right="48" bottom="32" left="48"/>
+                    </padding>
+
+                    <Label text="Return a Book" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Borrowed Books List -->
+                    <Label text="Your Borrowed Books" styleClass="field-label"/>
+                    <ListView
+                        fx:id="borrowedListView"
+                        prefHeight="200"
+                        styleClass="borrowed-list"/>
+
+                    <Label
+                        text="Select a book from the list above or type the title below."
+                        styleClass="helper-text"
+                        wrapText="true"/>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField
+                            fx:id="returnTitleField"
+                            promptText="Book title to return"
+                            styleClass="input-field"
+                            HBox.hgrow="ALWAYS"/>
+                        <Button
+                            text="Select from List"
+                            onAction="#handleSelectForReturn"
+                            styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <Button
+                        text="Return Book"
+                        onAction="#handleReturnBook"
+                        styleClass="btn-accent"
+                        maxWidth="Infinity"/>
+
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>

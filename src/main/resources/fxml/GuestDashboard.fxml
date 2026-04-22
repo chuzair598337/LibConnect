@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.libconnect.gui.GuestDashboardController"
+    styleClass="root-pane"
+    prefWidth="1100"
+    prefHeight="700">
+
+    <!-- ══════════════════════════════════════════════════════════
+         TOP NAV BAR
+    ══════════════════════════════════════════════════════════ -->
+    <top>
+        <HBox
+            styleClass="nav-bar"
+            alignment="CENTER_LEFT"
+            spacing="16">
+
+            <padding>
+                <Insets top="14" right="24" bottom="14" left="24"/>
+            </padding>
+
+            <Label text="LibConnect" styleClass="nav-brand"/>
+            <Label text="|" styleClass="nav-divider"/>
+
+            <Label
+                fx:id="welcomeLabel"
+                text="Browsing as Guest"
+                styleClass="nav-welcome"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label
+                fx:id="totalBooksLabel"
+                text="Books Available: 0"
+                styleClass="nav-stat"/>
+
+            <Button
+                text="Login / Sign In"
+                onAction="#handleLoginRedirect"
+                styleClass="btn-primary"/>
+
+        </HBox>
+    </top>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CENTER: Catalog Panel
+    ══════════════════════════════════════════════════════════ -->
+    <center>
+        <VBox spacing="16" styleClass="tab-content">
+            <padding>
+                <Insets top="24" right="28" bottom="24" left="28"/>
+            </padding>
+
+            <!-- Section Header -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="Book Catalog" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label
+                    text="Read-only access — Login to borrow books"
+                    styleClass="helper-text"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Search & Filter Row -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+
+                <TextField
+                    fx:id="searchField"
+                    promptText="Search by title or author..."
+                    styleClass="input-field"
+                    prefWidth="300"
+                    HBox.hgrow="ALWAYS"/>
+
+                <Button
+                    text="Search"
+                    onAction="#handleSearchBooks"
+                    styleClass="btn-primary"/>
+
+                <Button
+                    text="Clear"
+                    onAction="#handleClearSearch"
+                    styleClass="btn-secondary"/>
+
+                <Label text="Filter by Genre:" styleClass="field-label"/>
+
+                <ComboBox
+                    fx:id="genreFilterCombo"
+                    prefWidth="160"
+                    onAction="#handleGenreFilter"
+                    styleClass="combo-field"/>
+
+                <Button
+                    text="View Details"
+                    onAction="#handleViewBookDetails"
+                    styleClass="btn-ghost"/>
+
+            </HBox>
+
+            <!-- Book Catalog Table -->
+            <TableView
+                fx:id="catalogTable"
+                VBox.vgrow="ALWAYS"
+                styleClass="data-table">
+                <columns>
+                    <TableColumn
+                        fx:id="colBookId"
+                        text="Book ID"
+                        prefWidth="100"/>
+                    <TableColumn
+                        fx:id="colTitle"
+                        text="Title"
+                        prefWidth="300"/>
+                    <TableColumn
+                        fx:id="colAuthor"
+                        text="Author"
+                        prefWidth="210"/>
+                    <TableColumn
+                        fx:id="colGenre"
+                        text="Genre"
+                        prefWidth="150"/>
+                    <TableColumn
+                        fx:id="colCopies"
+                        text="Available"
+                        prefWidth="90"/>
+                </columns>
+            </TableView>
+
+            <!-- Guest CTA Banner -->
+            <HBox
+                styleClass="guest-banner"
+                alignment="CENTER"
+                spacing="16">
+                <padding>
+                    <Insets top="12" right="20" bottom="12" left="20"/>
+                </padding>
+                <Label
+                    text="Want to borrow books? Create an account or login to access full features."
+                    styleClass="guest-banner-text"/>
+                <Button
+                    text="Login Now"
+                    onAction="#handleLoginRedirect"
+                    styleClass="btn-primary"/>
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
