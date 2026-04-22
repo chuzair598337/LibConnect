@@ -320,7 +320,7 @@ The single source of truth for all application data. Implemented using the **Sin
 
 ### GUI Layer
 
-> All four FXML views are complete and mapped to the controllers below. Key `fx:id` bindings are listed in **FXML — Screen to Controller Wiring**; remaining work (e.g. styling polish) is in the [Roadmap](#roadmap).
+> All four FXML views are complete and mapped to the controllers below. Key `fx:id` bindings are listed in **FXML — Screen to Controller Wiring**; the global `styles.css` theme applies to every screen. Remaining: tests and future polish as tracked in the [Roadmap](#roadmap).
 
 | File | Responsibility |
 |---|---|
@@ -474,7 +474,7 @@ git push origin main
 - [x] `LibrarianDashboard.fxml` — Librarian UI
 - [x] `MemberDashboard.fxml` — Member UI
 - [x] `GuestDashboard.fxml` — Guest UI
-- [ ] `styles.css` — Global styling
+- [x] `styles.css` — Global styling
 - [x] Full JavaFX controller wiring
 - [ ] Unit tests
 
