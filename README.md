@@ -13,6 +13,7 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running the App](#running-the-app)
+  - [Running Tests](#running-tests)
 - [Project Structure](#project-structure)
 - [Architecture Overview](#architecture-overview)
 - [Class Breakdown](#class-breakdown)
@@ -21,6 +22,7 @@
   - [GUI Layer](#gui-layer)
   - [FXML — Screen to Controller Wiring](#fxml--screen-to-controller-wiring)
 - [OOP Concepts Applied](#oop-concepts-applied)
+- [Unit Testing](#unit-testing)
 - [Default Login Credentials](#default-login-credentials)
 - [Seed Data](#seed-data)
 - [User Roles & Permissions](#user-roles--permissions)
@@ -46,6 +48,7 @@ Built on core Object-Oriented Programming principles including inheritance, enca
 | **JavaFX 21** | GUI framework for desktop interface |
 | **FXML** | Declarative UI layout files |
 | **Maven** | Build tool & dependency management |
+| **JUnit 5** | Unit tests (Jupiter; `junit-jupiter` / `maven-surefire-plugin`) |
 | **Cursor IDE** | Development environment |
 | **Git** | Version control |
 
@@ -124,6 +127,14 @@ mvn clean compile
 mvn javafx:run
 ```
 
+### Running Tests
+
+```bash
+mvn test
+```
+
+This runs the JUnit 5 suite (Surefire) for model and `DataStore` code. The JavaFX UI is not covered by these tests. See [Unit Testing](#unit-testing) for a list of test classes and scope.
+
 ---
 
 ## Project Structure
@@ -148,6 +159,7 @@ LibConnect/
     │   │       │   └── Book.java          (Book entity)
     │   │       │
     │   │       ├── gui/               ← JavaFX controllers
+    │   │       │   ├── BaseController.java
     │   │       │   ├── GUIManager.java
     │   │       │   ├── LoginController.java
     │   │       │   ├── LibrarianDashboardController.java
@@ -170,7 +182,16 @@ LibConnect/
     │       └── images/                ← App assets & icons
     │
     └── test/
-        └── java/com/libconnect/       ← Unit tests (future)
+        └── java/
+            ├── com/libconnect/
+            │   ├── model/             ← JUnit 5: User, Book, Librarian, Member, Guest
+            │   │   ├── UserTest.java
+            │   │   ├── BookTest.java
+            │   │   ├── LibrarianTest.java
+            │   │   ├── MemberTest.java
+            │   │   └── GuestTest.java
+            │   └── util/
+            │       └── DataStoreTest.java
 ```
 
 ---
@@ -320,7 +341,7 @@ The single source of truth for all application data. Implemented using the **Sin
 
 ### GUI Layer
 
-> All four FXML views are complete and mapped to the controllers below. Key `fx:id` bindings are listed in **FXML — Screen to Controller Wiring**; the global `styles.css` theme applies to every screen. Remaining: tests and future polish as tracked in the [Roadmap](#roadmap).
+> All four FXML views are complete and mapped to the controllers below. Key `fx:id` bindings are listed in **FXML — Screen to Controller Wiring**; the global `styles.css` theme applies to every screen. [Unit tests](#unit-testing) cover the model and `DataStore` layers; JavaFX UI automation is not included.
 
 | File | Responsibility |
 |---|---|
@@ -358,6 +379,29 @@ Each FXML file sets `fx:controller` to its screen class. The table below lists p
 | **Singleton Pattern** | `DataStore` uses a static instance for centralized access |
 | **Collections** | `ArrayList` used for books, users, and borrowed books list |
 | **Stream API** | Used in DataStore for filtering and searching collections |
+
+---
+
+## Unit Testing
+
+| Item | Description |
+|---|---|
+| **Framework** | JUnit 5 (Jupiter), `junit-jupiter` **5.12.x** (test scope) |
+| **Runner** | `maven-surefire-plugin` with `useModulePath` disabled so tests run on the classpath alongside the modular `com.libconnect` app |
+| **Command** | `mvn test` (see [Running Tests](#running-tests)) |
+| **Scope** | Pure Java only — `User` / `Book` / role models, and `DataStore` (no TestFX, no headless scene tests) |
+| **Isolation** | `DataStore.resetForTests()` clears the singleton so each test (or `BeforeEach` hook) can depend on a fresh `seedData()`; do **not** call it from application code |
+
+### Test classes
+
+| Test class | Package | What is exercised |
+|---|---|---|
+| `UserTest` | `com.libconnect.model` | Abstract `User` via a `TestUser` double: constructor, getters/setters, `login` (incl. null-safety), `toString` |
+| `BookTest` | `com.libconnect.model` | Construction, `isAvailable`, `updateCopies` (incl. no negative stock), `toString`, `displayBookDetails` (stdout) |
+| `LibrarianTest` | `com.libconnect.model` | `Librarian` + `DataStore`: privileges, `addBook` / `removeBook`, `manageMembers` (actions / stdout) |
+| `MemberTest` | `com.libconnect.model` | `Member` + `DataStore`: `borrowBook`, `returnBook`, `viewBookDetails` |
+| `GuestTest` | `com.libconnect.model` | Default guest identity, `login`, `viewBookDetails` |
+| `DataStoreTest` | `com.libconnect.util` | Singleton / `resetForTests`, seeded counts, all book and user query/mutation methods, `authenticate`, `printAllData` |
 
 ---
 
@@ -476,7 +520,7 @@ git push origin main
 - [x] `GuestDashboard.fxml` — Guest UI
 - [x] `styles.css` — Global styling
 - [x] Full JavaFX controller wiring
-- [ ] Unit tests
+- [x] Unit tests — JUnit 5 (`UserTest`, `BookTest`, `LibrarianTest`, `MemberTest`, `GuestTest`, `DataStoreTest`); `mvn test`
 
 ---
 
