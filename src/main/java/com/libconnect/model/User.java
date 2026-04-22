@@ -20,8 +20,15 @@ public abstract class User {
 
     /**
      * Authenticates the user by comparing provided credentials.
+     * Null inputs, or a user with unset email/password, always yield {@code false}.
      */
     public boolean login(String email, String password) {
+        if (email == null || password == null) {
+            return false;
+        }
+        if (this.email == null || this.password == null) {
+            return false;
+        }
         return this.email.equals(email) && this.password.equals(password);
     }
 

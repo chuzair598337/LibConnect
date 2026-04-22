@@ -7,7 +7,6 @@ import com.libconnect.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class DataStore {
 
@@ -31,6 +30,17 @@ public class DataStore {
             instance = new DataStore();
         }
         return instance;
+    }
+
+    /**
+     * Resets the singleton so the next call to {@link #getInstance()} returns a
+     * fresh store (including default {@link #seedData()}). Intended for unit
+     * tests; do not use from application code.
+     */
+    public static void resetForTests() {
+        synchronized (DataStore.class) {
+            instance = null;
+        }
     }
 
     // ════════════════════════════════════════════════════════════
