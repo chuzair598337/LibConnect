@@ -53,7 +53,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.libconnect/com.libconnect.Main</mainClass>
+                    <mainClass>com.libconnect.Main</mainClass>
                 </configuration>
             </plugin>
 

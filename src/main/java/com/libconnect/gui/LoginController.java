@@ -73,6 +73,13 @@ public class LoginController extends BaseController {
         guiManager.showDashboard(new Guest());
     }
 
+    @FXML
+    private void handleReset() {
+        emailField.clear();
+        passwordField.clear();
+        clearError();
+    }
+
     // ════════════════════════════════════════════════════════════
     // HELPERS
     // ════════════════════════════════════════════════════════════
